@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Changelog - Fountain Spell Checker</title>
+  <style>
+    :root {
+      --bg-primary: #0a0a14;
+      --bg-secondary: #12121f;
+      --bg-tertiary: #1a1a2e;
+      --text-primary: #ffffff;
+      --text-secondary: rgba(255, 255, 255, 0.7);
+      --text-muted: rgba(255, 255, 255, 0.4);
+      --accent-blue: #4a9eff;
+      --accent-purple: #7b68ee;
+      --accent-green: #4ade80;
+      --accent-red: #ff6b6b;
+      --accent-yellow: #fbbf24;
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      line-height: 1.7;
+    }
+    
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 80px 32px;
+    }
+    
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--accent-blue);
+      text-decoration: none;
+      font-size: 14px;
+      margin-bottom: 32px;
+      transition: opacity 0.2s ease;
+    }
+    
+    .back-link:hover {
+      opacity: 0.8;
+    }
+    
+    .page-header {
+      margin-bottom: 48px;
+    }
+    
+    .page-title {
+      font-size: 42px;
+      font-weight: 700;
+      margin-bottom: 16px;
+      background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    
+    .page-subtitle {
+      font-size: 16px;
+      color: var(--text-secondary);
+    }
+    
+    .timeline {
+      position: relative;
+      padding-left: 32px;
+    }
+    
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 7px;
+      top: 8px;
+      bottom: 8px;
+      width: 2px;
+      background: linear-gradient(to bottom, var(--accent-blue), var(--accent-purple), transparent);
+    }
+    
+    .release {
+      position: relative;
+      margin-bottom: 48px;
+    }
+    
+    .release::before {
+      content: '';
+      position: absolute;
+      left: -32px;
+      top: 8px;
+      width: 16px;
+      height: 16px;
+      background: var(--accent-blue);
+      border-radius: 50%;
+      border: 3px solid var(--bg-primary);
+    }
+    
+    .release.latest::before {
+      background: var(--accent-green);
+      box-shadow: 0 0 12px rgba(74, 222, 128, 0.5);
+    }
+    
+    .release-header {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+    }
+    
+    .release-version {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+    
+    .release-date {
+      font-size: 14px;
+      color: var(--text-muted);
+      background: rgba(255, 255, 255, 0.05);
+      padding: 4px 12px;
+      border-radius: 20px;
+    }
+    
+    .release-tag {
+      font-size: 11px;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 6px;
+      text-transform: uppercase;
+    }
+    
+    .release-tag.latest {
+      background: rgba(74, 222, 128, 0.2);
+      color: var(--accent-green);
+    }
+    
+    .release-tag.major {
+      background: rgba(74, 158, 255, 0.2);
+      color: var(--accent-blue);
+    }
+    
+    .release-content {
+      background: var(--bg-tertiary);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      padding: 24px;
+    }
+    
+    .change-category {
+      margin-bottom: 20px;
+    }
+    
+    .change-category:last-child {
+      margin-bottom: 0;
+    }
+    
+    .category-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 12px;
+      color: var(--text-primary);
+    }
+    
+    .category-icon {
+      width: 24px;
+      height: 24px;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+    }
+    
+    .category-icon.added {
+      background: rgba(74, 222, 128, 0.2);
+      color: var(--accent-green);
+    }
+    
+    .category-icon.improved {
+      background: rgba(74, 158, 255, 0.2);
+      color: var(--accent-blue);
+    }
+    
+    .category-icon.fixed {
+      background: rgba(255, 107, 107, 0.2);
+      color: var(--accent-red);
+    }
+    
+    .category-icon.changed {
+      background: rgba(251, 191, 36, 0.2);
+      color: var(--accent-yellow);
+    }
+    
+    .change-list {
+      list-style: none;
+      padding-left: 32px;
+    }
+    
+    .change-list li {
+      position: relative;
+      color: var(--text-secondary);
+      margin-bottom: 8px;
+      font-size: 14px;
+    }
+    
+    .change-list li::before {
+      content: '→';
+      position: absolute;
+      left: -20px;
+      color: var(--text-muted);
+    }
+    
+    .roadmap {
+      margin-top: 64px;
+      background: linear-gradient(135deg, rgba(74, 158, 255, 0.1), rgba(123, 104, 238, 0.1));
+      border: 1px solid rgba(74, 158, 255, 0.2);
+      border-radius: 16px;
+      padding: 32px;
+    }
+    
+    .roadmap-title {
+      font-size: 20px;
+      font-weight: 600;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .roadmap-list {
+      list-style: none;
+    }
+    
+    .roadmap-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      margin-bottom: 12px;
+      color: var(--text-secondary);
+      font-size: 14px;
+    }
+    
+    .roadmap-status {
+      font-size: 11px;
+      padding: 2px 8px;
+      border-radius: 4px;
+      white-space: nowrap;
+    }
+    
+    .roadmap-status.planned {
+      background: rgba(123, 104, 238, 0.2);
+      color: var(--accent-purple);
+    }
+    
+    .roadmap-status.in-progress {
+      background: rgba(251, 191, 36, 0.2);
+      color: var(--accent-yellow);
+    }
+    
+    @media (max-width: 768px) {
+      .container {
+        padding: 40px 20px;
+      }
+      
+      .page-title {
+        font-size: 32px;
+      }
+      
+      .timeline {
+        padding-left: 24px;
+      }
+      
+      .release::before {
+        left: -24px;
+        width: 12px;
+        height: 12px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <a href="landing.html" class="back-link">← Back to Home</a>
+    
+    <header class="page-header">
+      <h1 class="page-title">Changelog</h1>
+      <p class="page-subtitle">Track all updates and improvements to Fountain Spell Checker</p>
+    </header>
+    
+    <div class="timeline">
+      <!-- Version 1.0.0 -->
+      <div class="release latest">
+        <div class="release-header">
+          <span class="release-version">v1.0.0</span>
+          <span class="release-date">January 2026</span>
+          <span class="release-tag latest">Latest</span>
+          <span class="release-tag major">Major Release</span>
+        </div>
+        
+        <div class="release-content">
+          <div class="change-category">
+            <div class="category-title">
+              <span class="category-icon added">✓</span>
+              Added
+            </div>
+            <ul class="change-list">
+              <li>Initial release of Fountain Spell Checker</li>
+              <li>Real-time spell checking across all websites</li>
+              <li>Built-in dictionary with 200+ common misspellings</li>
+              <li>Beautiful dark-themed popup notifications</li>
+              <li>Statistics dashboard with 30-day activity chart</li>
+              <li>Export spelling history as JSON</li>
+              <li>Works with input, textarea, and contenteditable elements</li>
+              <li>100% offline and private - no data collection</li>
+            </ul>
+          </div>
+          
+          <div class="change-category">
+            <div class="category-title">
+              <span class="category-icon improved">↑</span>
+              Features
+            </div>
+            <ul class="change-list">
+              <li>Chrome Extension Manifest V3 compliant</li>
+              <li>Event delegation for dynamically created text fields</li>
+              <li>Animated popup with correction hints</li>
+              <li>Sortable word table (by frequency, recency, alphabetical)</li>
+              <li>Weekly data tracking for progress visualization</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Future versions placeholder -->
+      <div class="release">
+        <div class="release-header">
+          <span class="release-version">v0.9.0</span>
+          <span class="release-date">December 2025</span>
+        </div>
+        
+        <div class="release-content">
+          <div class="change-category">
+            <div class="category-title">
+              <span class="category-icon added">✓</span>
+              Development
+            </div>
+            <ul class="change-list">
+              <li>Beta testing phase</li>
+              <li>Core spell checking engine developed</li>
+              <li>Initial dictionary compiled</li>
+              <li>Dashboard UI designed</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Roadmap -->
+    <div class="roadmap">
+      <h2 class="roadmap-title">🗺️ Roadmap</h2>
+      <ul class="roadmap-list">
+        <li>
+          <span class="roadmap-status planned">Planned</span>
+          <span>Custom dictionary support - add your own words</span>
+        </li>
+        <li>
+          <span class="roadmap-status planned">Planned</span>
+          <span>Firefox and Safari browser support</span>
+        </li>
+        <li>
+          <span class="roadmap-status planned">Planned</span>
+          <span>Keyboard shortcuts for quick actions</span>
+        </li>
+        <li>
+          <span class="roadmap-status planned">Planned</span>
+          <span>Sound effects option for corrections</span>
+        </li>
+        <li>
+          <span class="roadmap-status planned">Planned</span>
+          <span>Multiple language dictionaries</span>
+        </li>
+        <li>
+          <span class="roadmap-status in-progress">In Progress</span>
+          <span>Improved detection for rich text editors</span>
+        </li>
+      </ul>
+    </div>
+  </div>
+</body>
+</html>
+

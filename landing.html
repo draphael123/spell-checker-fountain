@@ -960,6 +960,404 @@
     }
     
     /* ============================================================
+       THEME TOGGLE
+       ============================================================ */
+    .theme-toggle {
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin-left: 16px;
+    }
+    
+    .theme-toggle:hover {
+      background: rgba(255, 255, 255, 0.15);
+      transform: rotate(20deg);
+    }
+    
+    .theme-icon {
+      font-size: 18px;
+      transition: transform 0.3s ease;
+    }
+    
+    /* Light theme */
+    body.light-theme {
+      --bg-primary: #f5f7fa;
+      --bg-secondary: #e8ecf1;
+      --bg-tertiary: #ffffff;
+      --text-primary: #1a1a2e;
+      --text-secondary: rgba(26, 26, 46, 0.7);
+      --text-muted: rgba(26, 26, 46, 0.4);
+    }
+    
+    body.light-theme nav {
+      background: rgba(245, 247, 250, 0.9);
+    }
+    
+    body.light-theme .demo-textarea {
+      background: rgba(0, 0, 0, 0.05);
+    }
+    
+    /* ============================================================
+       STATS BANNER SECTION
+       ============================================================ */
+    .stats-banner {
+      padding: 80px 32px;
+      background: linear-gradient(135deg, rgba(74, 158, 255, 0.1) 0%, rgba(123, 104, 238, 0.1) 100%);
+      border-top: 1px solid rgba(74, 158, 255, 0.2);
+      border-bottom: 1px solid rgba(123, 104, 238, 0.2);
+    }
+    
+    .stats-banner-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 32px;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+    
+    .stats-banner-item {
+      text-align: center;
+    }
+    
+    .stats-banner-value {
+      font-size: 48px;
+      font-weight: 800;
+      background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      line-height: 1.2;
+    }
+    
+    .stats-banner-label {
+      font-size: 14px;
+      color: var(--text-secondary);
+      margin-top: 8px;
+    }
+    
+    /* ============================================================
+       COMPARISON SECTION
+       ============================================================ */
+    .comparison {
+      padding: 120px 32px;
+      background: var(--bg-primary);
+    }
+    
+    .comparison-table-wrapper {
+      max-width: 900px;
+      margin: 0 auto;
+      overflow-x: auto;
+    }
+    
+    .comparison-table {
+      width: 100%;
+      border-collapse: collapse;
+      background: var(--bg-tertiary);
+      border-radius: 16px;
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .comparison-table th,
+    .comparison-table td {
+      padding: 20px 24px;
+      text-align: left;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    
+    .comparison-table th {
+      background: rgba(74, 158, 255, 0.1);
+      font-weight: 600;
+      font-size: 14px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    
+    .comparison-table th:first-child {
+      background: transparent;
+    }
+    
+    .comparison-table th.highlight {
+      background: linear-gradient(135deg, rgba(74, 158, 255, 0.2), rgba(123, 104, 238, 0.2));
+      color: var(--accent-blue);
+    }
+    
+    .comparison-table td {
+      font-size: 15px;
+      color: var(--text-secondary);
+    }
+    
+    .comparison-table td:first-child {
+      font-weight: 500;
+      color: var(--text-primary);
+    }
+    
+    .comparison-table td.highlight {
+      background: rgba(74, 158, 255, 0.05);
+    }
+    
+    .check-yes {
+      color: var(--accent-green);
+      font-size: 18px;
+    }
+    
+    .check-no {
+      color: var(--accent-red);
+      font-size: 18px;
+    }
+    
+    .check-partial {
+      color: var(--accent-purple);
+      font-size: 14px;
+    }
+    
+    /* ============================================================
+       FAQ SECTION
+       ============================================================ */
+    .faq {
+      padding: 120px 32px;
+      background: var(--bg-secondary);
+    }
+    
+    .faq-grid {
+      max-width: 800px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    
+    .faq-item {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 12px;
+      overflow: hidden;
+      transition: all 0.3s ease;
+    }
+    
+    .faq-item:hover {
+      border-color: rgba(74, 158, 255, 0.2);
+    }
+    
+    .faq-question {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 24px;
+      background: transparent;
+      border: none;
+      color: var(--text-primary);
+      font-size: 16px;
+      font-weight: 600;
+      text-align: left;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .faq-question:hover {
+      color: var(--accent-blue);
+    }
+    
+    .faq-icon {
+      font-size: 20px;
+      color: var(--accent-purple);
+      transition: transform 0.3s ease;
+    }
+    
+    .faq-item.active .faq-icon {
+      transform: rotate(45deg);
+    }
+    
+    .faq-answer {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease, padding 0.3s ease;
+    }
+    
+    .faq-item.active .faq-answer {
+      max-height: 300px;
+    }
+    
+    .faq-answer-content {
+      padding: 0 24px 20px;
+      color: var(--text-secondary);
+      font-size: 15px;
+      line-height: 1.7;
+    }
+    
+    /* ============================================================
+       CONTACT SECTION
+       ============================================================ */
+    .contact {
+      padding: 120px 32px;
+      background: var(--bg-primary);
+    }
+    
+    .contact-container {
+      max-width: 600px;
+      margin: 0 auto;
+      background: var(--bg-tertiary);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 20px;
+      padding: 48px;
+    }
+    
+    .contact-form {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    
+    .form-label {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-secondary);
+    }
+    
+    .form-input,
+    .form-textarea {
+      padding: 14px 18px;
+      background: rgba(0, 0, 0, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      color: var(--text-primary);
+      font-size: 15px;
+      font-family: inherit;
+      transition: all 0.3s ease;
+    }
+    
+    .form-input:focus,
+    .form-textarea:focus {
+      outline: none;
+      border-color: var(--accent-blue);
+      box-shadow: 0 0 0 4px rgba(74, 158, 255, 0.1);
+    }
+    
+    .form-textarea {
+      min-height: 120px;
+      resize: vertical;
+    }
+    
+    .form-select {
+      padding: 14px 18px;
+      background: rgba(0, 0, 0, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      color: var(--text-primary);
+      font-size: 15px;
+      cursor: pointer;
+    }
+    
+    .form-select option {
+      background: var(--bg-tertiary);
+    }
+    
+    .form-submit {
+      margin-top: 8px;
+    }
+    
+    .form-success {
+      display: none;
+      text-align: center;
+      padding: 32px;
+    }
+    
+    .form-success.visible {
+      display: block;
+    }
+    
+    .form-success-icon {
+      font-size: 48px;
+      margin-bottom: 16px;
+    }
+    
+    .form-success-text {
+      font-size: 18px;
+      color: var(--accent-green);
+      font-weight: 600;
+    }
+    
+    /* ============================================================
+       SHARE BUTTONS
+       ============================================================ */
+    .share-section {
+      margin-top: 32px;
+      padding-top: 32px;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    
+    .share-title {
+      font-size: 12px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 16px;
+    }
+    
+    .share-buttons {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+    }
+    
+    .share-btn {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      background: rgba(255, 255, 255, 0.05);
+    }
+    
+    .share-btn:hover {
+      transform: translateY(-3px);
+      border-color: rgba(74, 158, 255, 0.3);
+    }
+    
+    .share-btn.twitter:hover { background: rgba(29, 161, 242, 0.2); }
+    .share-btn.reddit:hover { background: rgba(255, 69, 0, 0.2); }
+    .share-btn.linkedin:hover { background: rgba(0, 119, 181, 0.2); }
+    .share-btn.facebook:hover { background: rgba(66, 103, 178, 0.2); }
+    
+    /* ============================================================
+       SCROLL ANIMATIONS
+       ============================================================ */
+    .animate-on-scroll {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    
+    .animate-on-scroll.animated {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    
+    .animate-delay-1 { transition-delay: 0.1s; }
+    .animate-delay-2 { transition-delay: 0.2s; }
+    .animate-delay-3 { transition-delay: 0.3s; }
+    .animate-delay-4 { transition-delay: 0.4s; }
+    
+    /* ============================================================
        RESPONSIVE
        ============================================================ */
     @media (max-width: 768px) {
@@ -1025,6 +1423,32 @@
         left: 8px;
         right: 8px;
       }
+      
+      .stats-banner-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 24px;
+      }
+      
+      .stats-banner-value {
+        font-size: 36px;
+      }
+      
+      .comparison-table {
+        font-size: 14px;
+      }
+      
+      .comparison-table th,
+      .comparison-table td {
+        padding: 14px 16px;
+      }
+      
+      .contact-container {
+        padding: 32px 24px;
+      }
+      
+      .theme-toggle {
+        display: none;
+      }
     }
   </style>
 </head>
@@ -1038,10 +1462,13 @@
     <div class="nav-links">
       <a href="#demo">Try Demo</a>
       <a href="#features">Features</a>
-      <a href="#how-it-works">How It Works</a>
-      <a href="#installation">Install</a>
+      <a href="#compare">Compare</a>
+      <a href="#faq">FAQ</a>
       <a href="#installation" class="nav-cta">Get Started</a>
     </div>
+    <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme">
+      <span class="theme-icon">🌙</span>
+    </button>
   </nav>
 
   <!-- Hero Section -->
@@ -1087,6 +1514,28 @@
             </div>
           </div>
         </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Stats Banner -->
+  <section class="stats-banner">
+    <div class="stats-banner-grid">
+      <div class="stats-banner-item animate-on-scroll">
+        <div class="stats-banner-value">200+</div>
+        <div class="stats-banner-label">Words in Dictionary</div>
+      </div>
+      <div class="stats-banner-item animate-on-scroll animate-delay-1">
+        <div class="stats-banner-value">100%</div>
+        <div class="stats-banner-label">Offline & Private</div>
+      </div>
+      <div class="stats-banner-item animate-on-scroll animate-delay-2">
+        <div class="stats-banner-value">0</div>
+        <div class="stats-banner-label">Data Collected</div>
+      </div>
+      <div class="stats-banner-item animate-on-scroll animate-delay-3">
+        <div class="stats-banner-value">&lt;1KB</div>
+        <div class="stats-banner-label">Extension Size</div>
       </div>
     </div>
   </section>
@@ -1226,6 +1675,80 @@
     </div>
   </section>
 
+  <!-- Comparison Section -->
+  <section class="comparison" id="compare">
+    <div class="section-header">
+      <span class="section-label">Compare</span>
+      <h2 class="section-title">Why Fountain?</h2>
+      <p class="section-subtitle">
+        See how Fountain compares to other spelling solutions
+      </p>
+    </div>
+    
+    <div class="comparison-table-wrapper animate-on-scroll">
+      <table class="comparison-table">
+        <thead>
+          <tr>
+            <th>Feature</th>
+            <th class="highlight">✨ Fountain</th>
+            <th>Autocorrect</th>
+            <th>Grammarly</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Teaches Correct Spelling</td>
+            <td class="highlight"><span class="check-yes">✓</span></td>
+            <td><span class="check-no">✗</span></td>
+            <td><span class="check-no">✗</span></td>
+          </tr>
+          <tr>
+            <td>Builds Muscle Memory</td>
+            <td class="highlight"><span class="check-yes">✓</span></td>
+            <td><span class="check-no">✗</span></td>
+            <td><span class="check-no">✗</span></td>
+          </tr>
+          <tr>
+            <td>Works Offline</td>
+            <td class="highlight"><span class="check-yes">✓</span></td>
+            <td><span class="check-yes">✓</span></td>
+            <td><span class="check-no">✗</span></td>
+          </tr>
+          <tr>
+            <td>100% Private</td>
+            <td class="highlight"><span class="check-yes">✓</span></td>
+            <td><span class="check-yes">✓</span></td>
+            <td><span class="check-no">✗</span></td>
+          </tr>
+          <tr>
+            <td>Free Forever</td>
+            <td class="highlight"><span class="check-yes">✓</span></td>
+            <td><span class="check-yes">✓</span></td>
+            <td><span class="check-partial">Freemium</span></td>
+          </tr>
+          <tr>
+            <td>Progress Tracking</td>
+            <td class="highlight"><span class="check-yes">✓</span></td>
+            <td><span class="check-no">✗</span></td>
+            <td><span class="check-yes">✓</span></td>
+          </tr>
+          <tr>
+            <td>No Account Required</td>
+            <td class="highlight"><span class="check-yes">✓</span></td>
+            <td><span class="check-yes">✓</span></td>
+            <td><span class="check-no">✗</span></td>
+          </tr>
+          <tr>
+            <td>Open Source</td>
+            <td class="highlight"><span class="check-yes">✓</span></td>
+            <td><span class="check-no">✗</span></td>
+            <td><span class="check-no">✗</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
   <!-- How It Works Section -->
   <section class="how-it-works" id="how-it-works">
     <div class="section-header">
@@ -1328,6 +1851,154 @@
         <div class="install-code">
           chrome://extensions
         </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ Section -->
+  <section class="faq" id="faq">
+    <div class="section-header">
+      <span class="section-label">FAQ</span>
+      <h2 class="section-title">Frequently Asked Questions</h2>
+      <p class="section-subtitle">
+        Everything you need to know about Fountain
+      </p>
+    </div>
+    
+    <div class="faq-grid">
+      <div class="faq-item animate-on-scroll">
+        <button class="faq-question">
+          <span>Is my data sent to any servers?</span>
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-answer">
+          <div class="faq-answer-content">
+            No! Fountain works 100% offline. All your spelling data is stored locally in your browser using Chrome's storage API. We never collect, transmit, or have access to any of your typing data. Your privacy is completely protected.
+          </div>
+        </div>
+      </div>
+      
+      <div class="faq-item animate-on-scroll animate-delay-1">
+        <button class="faq-question">
+          <span>Which browsers are supported?</span>
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-answer">
+          <div class="faq-answer-content">
+            Fountain is built for Google Chrome and works on any Chromium-based browser including Microsoft Edge, Brave, Opera, and Vivaldi. Firefox and Safari support may be added in future versions.
+          </div>
+        </div>
+      </div>
+      
+      <div class="faq-item animate-on-scroll animate-delay-2">
+        <button class="faq-question">
+          <span>Can I add my own words to the dictionary?</span>
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-answer">
+          <div class="faq-answer-content">
+            Currently, Fountain uses a built-in dictionary of 200+ common misspellings. Custom word support is planned for a future update. Feel free to submit suggestions via the contact form or GitHub issues!
+          </div>
+        </div>
+      </div>
+      
+      <div class="faq-item animate-on-scroll animate-delay-3">
+        <button class="faq-question">
+          <span>Does it work on all websites?</span>
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-answer">
+          <div class="faq-answer-content">
+            Yes! Fountain works on virtually any website with text inputs, textareas, or contenteditable fields. This includes Gmail, Google Docs, social media, forums, and more. Some highly restricted sites may block extensions.
+          </div>
+        </div>
+      </div>
+      
+      <div class="faq-item animate-on-scroll animate-delay-4">
+        <button class="faq-question">
+          <span>Why make me retype instead of auto-correcting?</span>
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-answer">
+          <div class="faq-answer-content">
+            Research shows that active recall—physically typing the correct spelling—creates stronger neural pathways than passive correction. By retyping words yourself, you build muscle memory and actually learn the correct spelling instead of relying on software forever.
+          </div>
+        </div>
+      </div>
+      
+      <div class="faq-item animate-on-scroll">
+        <button class="faq-question">
+          <span>How do I export my data?</span>
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-answer">
+          <div class="faq-answer-content">
+            Open the Fountain dashboard by clicking the extension icon and selecting "View Dashboard". From there, click the "Export Data" button to download your complete spelling history as a JSON file.
+          </div>
+        </div>
+      </div>
+      
+      <div class="faq-item animate-on-scroll animate-delay-1">
+        <button class="faq-question">
+          <span>Is Fountain free?</span>
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-answer">
+          <div class="faq-answer-content">
+            Yes, Fountain is completely free and open source. There are no premium tiers, subscriptions, or hidden costs. The source code is available on GitHub for anyone to inspect, modify, or contribute to.
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact Section -->
+  <section class="contact" id="contact">
+    <div class="section-header">
+      <span class="section-label">Contact</span>
+      <h2 class="section-title">Get in Touch</h2>
+      <p class="section-subtitle">
+        Have feedback, suggestions, or found a bug? Let us know!
+      </p>
+    </div>
+    
+    <div class="contact-container animate-on-scroll">
+      <form class="contact-form" id="contact-form">
+        <div class="form-group">
+          <label class="form-label" for="contact-name">Name</label>
+          <input type="text" id="contact-name" class="form-input" placeholder="Your name" required>
+        </div>
+        
+        <div class="form-group">
+          <label class="form-label" for="contact-email">Email</label>
+          <input type="email" id="contact-email" class="form-input" placeholder="your@email.com" required>
+        </div>
+        
+        <div class="form-group">
+          <label class="form-label" for="contact-type">Type</label>
+          <select id="contact-type" class="form-select">
+            <option value="feedback">General Feedback</option>
+            <option value="bug">Bug Report</option>
+            <option value="feature">Feature Request</option>
+            <option value="word">Suggest a Word</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
+        
+        <div class="form-group">
+          <label class="form-label" for="contact-message">Message</label>
+          <textarea id="contact-message" class="form-textarea" placeholder="Your message..." required></textarea>
+        </div>
+        
+        <button type="submit" class="btn btn-primary form-submit">
+          <span>📨</span> Send Message
+        </button>
+      </form>
+      
+      <div class="form-success" id="form-success">
+        <div class="form-success-icon">✅</div>
+        <div class="form-success-text">Thanks for your message!</div>
+        <p style="color: var(--text-secondary); margin-top: 8px;">We'll get back to you soon.</p>
       </div>
     </div>
   </section>
@@ -1534,6 +2205,86 @@
       updateStats();
       renderHistory();
     })();
+    
+    // ============================================================
+    // FAQ ACCORDION
+    // ============================================================
+    document.querySelectorAll('.faq-question').forEach(button => {
+      button.addEventListener('click', () => {
+        const item = button.parentElement;
+        const isActive = item.classList.contains('active');
+        
+        // Close all other items
+        document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('active'));
+        
+        // Toggle current item
+        if (!isActive) {
+          item.classList.add('active');
+        }
+      });
+    });
+    
+    // ============================================================
+    // CONTACT FORM
+    // ============================================================
+    document.getElementById('contact-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      // Simulate form submission
+      const form = this;
+      const success = document.getElementById('form-success');
+      
+      // Hide form, show success
+      form.style.display = 'none';
+      success.classList.add('visible');
+      
+      // Reset after 3 seconds
+      setTimeout(() => {
+        form.reset();
+        form.style.display = 'flex';
+        success.classList.remove('visible');
+      }, 3000);
+    });
+    
+    // ============================================================
+    // THEME TOGGLE
+    // ============================================================
+    const themeToggle = document.getElementById('theme-toggle');
+    const themeIcon = themeToggle.querySelector('.theme-icon');
+    
+    // Check for saved theme preference
+    const savedTheme = localStorage.getItem('fountain-theme');
+    if (savedTheme === 'light') {
+      document.body.classList.add('light-theme');
+      themeIcon.textContent = '☀️';
+    }
+    
+    themeToggle.addEventListener('click', () => {
+      document.body.classList.toggle('light-theme');
+      const isLight = document.body.classList.contains('light-theme');
+      themeIcon.textContent = isLight ? '☀️' : '🌙';
+      localStorage.setItem('fountain-theme', isLight ? 'light' : 'dark');
+    });
+    
+    // ============================================================
+    // SCROLL ANIMATIONS
+    // ============================================================
+    const observerOptions = {
+      threshold: 0.1,
+      rootMargin: '0px 0px -50px 0px'
+    };
+    
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('animated');
+        }
+      });
+    }, observerOptions);
+    
+    document.querySelectorAll('.animate-on-scroll').forEach(el => {
+      observer.observe(el);
+    });
   </script>
 
   <!-- Footer -->
@@ -1546,8 +2297,33 @@
     <div class="footer-links">
       <a href="dashboard.html">Dashboard</a>
       <a href="#features">Features</a>
-      <a href="#installation">Install</a>
+      <a href="#faq">FAQ</a>
+      <a href="privacy.html">Privacy Policy</a>
+      <a href="changelog.html">Changelog</a>
+      <a href="https://github.com/draphael123/spell-checker-fountain" target="_blank">GitHub</a>
     </div>
+    
+    <div class="share-section">
+      <div class="share-title">Share Fountain</div>
+      <div class="share-buttons">
+        <a href="https://twitter.com/intent/tweet?text=Check%20out%20Fountain%20Spell%20Checker%20-%20Learn%20spelling%20by%20actually%20typing!&url=https://fountain-spell-checker.vercel.app" target="_blank" class="share-btn twitter" aria-label="Share on Twitter">
+          𝕏
+        </a>
+        <a href="https://www.reddit.com/submit?url=https://fountain-spell-checker.vercel.app&title=Fountain%20Spell%20Checker%20-%20Learn%20spelling%20by%20retyping" target="_blank" class="share-btn reddit" aria-label="Share on Reddit">
+          ⬆
+        </a>
+        <a href="https://www.linkedin.com/sharing/share-offsite/?url=https://fountain-spell-checker.vercel.app" target="_blank" class="share-btn linkedin" aria-label="Share on LinkedIn">
+          in
+        </a>
+        <a href="https://www.facebook.com/sharer/sharer.php?u=https://fountain-spell-checker.vercel.app" target="_blank" class="share-btn facebook" aria-label="Share on Facebook">
+          f
+        </a>
+      </div>
+    </div>
+    
+    <p style="margin-top: 32px; font-size: 12px; color: var(--text-muted);">
+      © 2026 Fountain Spell Checker. Open source under MIT License.
+    </p>
   </footer>
 </body>
 </html>
