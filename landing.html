@@ -819,6 +819,51 @@
       background: var(--bg-secondary);
     }
     
+    .download-box {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      max-width: 700px;
+      margin: 0 auto 48px;
+      padding: 24px 32px;
+      background: linear-gradient(135deg, rgba(74, 158, 255, 0.15), rgba(123, 104, 238, 0.15));
+      border: 2px solid rgba(74, 158, 255, 0.3);
+      border-radius: 16px;
+      box-shadow: 0 8px 32px rgba(74, 158, 255, 0.1);
+    }
+    
+    .download-icon {
+      font-size: 48px;
+      flex-shrink: 0;
+    }
+    
+    .download-content {
+      flex: 1;
+    }
+    
+    .download-title {
+      font-size: 20px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+    
+    .download-version {
+      font-size: 14px;
+      color: var(--text-muted);
+    }
+    
+    .download-btn {
+      flex-shrink: 0;
+      padding: 16px 32px;
+      font-size: 16px;
+      box-shadow: 0 4px 20px rgba(74, 158, 255, 0.4);
+    }
+    
+    .download-btn:hover {
+      transform: translateY(-3px) scale(1.02);
+      box-shadow: 0 8px 32px rgba(74, 158, 255, 0.5);
+    }
+    
     .install-methods {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
@@ -1449,6 +1494,16 @@
       .theme-toggle {
         display: none;
       }
+      
+      .download-box {
+        flex-direction: column;
+        text-align: center;
+        padding: 24px;
+      }
+      
+      .download-btn {
+        width: 100%;
+      }
     }
   </style>
 </head>
@@ -1490,11 +1545,11 @@
       </p>
       
       <div class="hero-buttons">
-        <a href="#demo" class="btn btn-primary">
-          <span>🎮</span> Try Demo
+        <a href="fountain-spell-checker-v1.0.0.zip" download class="btn btn-primary">
+          <span>⬇️</span> Download Extension
         </a>
-        <a href="#installation" class="btn btn-secondary">
-          <span>🚀</span> Install Extension
+        <a href="#demo" class="btn btn-secondary">
+          <span>🎮</span> Try Demo
         </a>
       </div>
       
@@ -1814,43 +1869,59 @@
       <span class="section-label">Get Started</span>
       <h2 class="section-title">Installation</h2>
       <p class="section-subtitle">
-        Choose your preferred installation method
+        Download and install in under a minute
       </p>
+    </div>
+    
+    <!-- Direct Download Box -->
+    <div class="download-box animate-on-scroll">
+      <div class="download-icon">📦</div>
+      <div class="download-content">
+        <h3 class="download-title">Download Fountain Spell Checker</h3>
+        <p class="download-version">Version 1.0.0 • ~50KB • Chrome/Edge/Brave</p>
+      </div>
+      <a href="fountain-spell-checker-v1.0.0.zip" download class="btn btn-primary download-btn">
+        <span>⬇️</span> Download ZIP
+      </a>
     </div>
     
     <div class="install-methods">
       <div class="install-card recommended">
-        <span class="install-badge">Recommended</span>
-        <h3 class="install-title">Chrome Web Store</h3>
+        <span class="install-badge">Quick Install</span>
+        <h3 class="install-title">Install from Download</h3>
         <p class="install-description">
-          The easiest way to install. One click and you're ready to go.
+          Install the extension in 4 simple steps after downloading.
         </p>
         <ul class="install-steps">
-          <li>Visit the Chrome Web Store listing</li>
-          <li>Click "Add to Chrome"</li>
-          <li>Confirm the installation</li>
-          <li>Start typing on any website!</li>
+          <li>Download the ZIP file above</li>
+          <li>Extract/unzip the folder</li>
+          <li>Open Chrome → <code>chrome://extensions</code></li>
+          <li>Enable "Developer mode" (top right)</li>
+          <li>Click "Load unpacked" → select the extracted folder</li>
         </ul>
-        <a href="#" class="btn btn-primary" style="width: 100%; justify-content: center; margin-top: 16px;">
-          <span>🛒</span> View on Chrome Web Store
+        <a href="fountain-spell-checker-v1.0.0.zip" download class="btn btn-secondary" style="width: 100%; justify-content: center; margin-top: 16px;">
+          <span>⬇️</span> Download Extension
         </a>
       </div>
       
       <div class="install-card">
-        <h3 class="install-title">Developer Mode</h3>
+        <h3 class="install-title">Clone from GitHub</h3>
         <p class="install-description">
-          Load the extension directly from source for development or testing.
+          For developers who want to contribute or customize.
         </p>
         <ul class="install-steps">
-          <li>Download or clone the repository</li>
-          <li>Open Chrome and navigate to: <code>chrome://extensions</code></li>
-          <li>Enable "Developer mode" (top right toggle)</li>
+          <li>Clone or fork the repository</li>
+          <li>Open Chrome → <code>chrome://extensions</code></li>
+          <li>Enable "Developer mode" (top right)</li>
           <li>Click "Load unpacked" button</li>
-          <li>Select the extension folder</li>
+          <li>Select the cloned folder</li>
         </ul>
         <div class="install-code">
-          chrome://extensions
+          git clone https://github.com/draphael123/spell-checker-fountain.git
         </div>
+        <a href="https://github.com/draphael123/spell-checker-fountain" target="_blank" class="btn btn-secondary" style="width: 100%; justify-content: center; margin-top: 16px;">
+          <span>🐙</span> View on GitHub
+        </a>
       </div>
     </div>
   </section>
