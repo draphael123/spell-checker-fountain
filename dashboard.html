@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fountain Spell Checker - Dashboard</title>
+  <link rel="stylesheet" href="dashboard.css">
+</head>
+<body>
+  <div class="dashboard">
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="logo">
+          <span class="logo-icon">✨</span>
+          <span class="logo-text">Fountain</span>
+        </div>
+      </div>
+      
+      <nav class="sidebar-nav">
+        <a href="#overview" class="nav-item active" data-section="overview">
+          <span class="nav-icon">📊</span>
+          <span>Overview</span>
+        </a>
+        <a href="#words" class="nav-item" data-section="words">
+          <span class="nav-icon">📝</span>
+          <span>All Words</span>
+        </a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <button class="sidebar-btn" id="export-btn">
+          <span class="btn-icon">📥</span>
+          Export Data
+        </button>
+        <button class="sidebar-btn danger" id="reset-btn">
+          <span class="btn-icon">🗑️</span>
+          Reset Data
+        </button>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <!-- Header -->
+      <header class="main-header">
+        <h1 class="page-title">Dashboard</h1>
+        <div class="header-actions">
+          <span class="last-updated" id="last-updated">Last updated: --</span>
+          <button class="refresh-btn" id="refresh-btn">
+            <span>↻</span> Refresh
+          </button>
+        </div>
+      </header>
+
+      <!-- Overview Section -->
+      <section id="overview" class="section active">
+        <!-- Stats Cards -->
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-header">
+              <span class="stat-icon misspell">✗</span>
+              <span class="stat-trend" id="misspell-trend">--</span>
+            </div>
+            <div class="stat-value" id="stat-misspellings">0</div>
+            <div class="stat-label">Total Misspellings</div>
+          </div>
+          
+          <div class="stat-card">
+            <div class="stat-header">
+              <span class="stat-icon correct">✓</span>
+              <span class="stat-trend" id="correct-trend">--</span>
+            </div>
+            <div class="stat-value" id="stat-corrections">0</div>
+            <div class="stat-label">Total Corrections</div>
+          </div>
+          
+          <div class="stat-card">
+            <div class="stat-header">
+              <span class="stat-icon accuracy">◎</span>
+            </div>
+            <div class="stat-value" id="stat-accuracy">100%</div>
+            <div class="stat-label">Correction Rate</div>
+          </div>
+          
+          <div class="stat-card">
+            <div class="stat-header">
+              <span class="stat-icon words">📚</span>
+            </div>
+            <div class="stat-value" id="stat-unique">0</div>
+            <div class="stat-label">Unique Words</div>
+          </div>
+        </div>
+
+        <!-- Activity Chart -->
+        <div class="chart-container">
+          <div class="chart-header">
+            <h2 class="chart-title">30-Day Activity</h2>
+            <div class="chart-legend">
+              <span class="legend-item misspell">
+                <span class="legend-color"></span>
+                Misspellings
+              </span>
+              <span class="legend-item correct">
+                <span class="legend-color"></span>
+                Corrections
+              </span>
+            </div>
+          </div>
+          <div class="chart-wrapper">
+            <canvas id="activity-chart"></canvas>
+          </div>
+        </div>
+
+        <!-- Top Trouble Words -->
+        <div class="trouble-container">
+          <h2 class="section-title">Top Trouble Words</h2>
+          <div class="trouble-grid" id="trouble-grid">
+            <!-- Populated by JS -->
+          </div>
+        </div>
+      </section>
+
+      <!-- Words Section -->
+      <section id="words" class="section">
+        <div class="table-container">
+          <div class="table-header">
+            <h2 class="table-title">All Misspelled Words</h2>
+            <div class="table-controls">
+              <input type="text" class="search-input" id="search-input" placeholder="Search words...">
+              <select class="sort-select" id="sort-select">
+                <option value="count-desc">Most Frequent</option>
+                <option value="count-asc">Least Frequent</option>
+                <option value="recent">Most Recent</option>
+                <option value="oldest">Oldest</option>
+                <option value="alpha-asc">A → Z</option>
+                <option value="alpha-desc">Z → A</option>
+              </select>
+            </div>
+          </div>
+          
+          <div class="table-wrapper">
+            <table class="words-table">
+              <thead>
+                <tr>
+                  <th>Misspelled</th>
+                  <th>Correct</th>
+                  <th>Count</th>
+                  <th>Corrected</th>
+                  <th>Rate</th>
+                  <th>First Seen</th>
+                  <th>Last Seen</th>
+                </tr>
+              </thead>
+              <tbody id="words-table-body">
+                <!-- Populated by JS -->
+              </tbody>
+            </table>
+          </div>
+          
+          <div class="table-footer">
+            <span class="table-count" id="table-count">0 words</span>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- Reset Confirmation Modal -->
+  <div class="modal" id="reset-modal">
+    <div class="modal-content">
+      <div class="modal-icon">⚠️</div>
+      <h3 class="modal-title">Reset All Data?</h3>
+      <p class="modal-text">This will permanently delete all your spelling history. This action cannot be undone.</p>
+      <div class="modal-actions">
+        <button class="modal-btn cancel" id="modal-cancel">Cancel</button>
+        <button class="modal-btn confirm" id="modal-confirm">Reset Everything</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="dashboard.js"></script>
+</body>
+</html>
+

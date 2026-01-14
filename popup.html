@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fountain Spell Checker</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div class="popup-container">
+    <!-- Header -->
+    <header class="popup-header">
+      <div class="logo">
+        <span class="logo-icon">✨</span>
+        <span class="logo-text">Fountain</span>
+      </div>
+      <span class="version">v1.0</span>
+    </header>
+
+    <!-- Stats Overview -->
+    <section class="stats-section">
+      <div class="stat-card">
+        <div class="stat-icon misspell-icon">✗</div>
+        <div class="stat-info">
+          <span class="stat-value" id="total-misspellings">0</span>
+          <span class="stat-label">Misspellings</span>
+        </div>
+      </div>
+      
+      <div class="stat-card">
+        <div class="stat-icon correct-icon">✓</div>
+        <div class="stat-info">
+          <span class="stat-value" id="total-corrections">0</span>
+          <span class="stat-label">Corrections</span>
+        </div>
+      </div>
+      
+      <div class="stat-card accuracy-card">
+        <div class="stat-icon accuracy-icon">◎</div>
+        <div class="stat-info">
+          <span class="stat-value" id="accuracy">100%</span>
+          <span class="stat-label">Accuracy</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Progress Bar -->
+    <div class="progress-container">
+      <div class="progress-bar" id="progress-bar"></div>
+      <span class="progress-label">Correction Rate</span>
+    </div>
+
+    <!-- Trouble Words -->
+    <section class="trouble-section">
+      <h3 class="section-title">
+        <span class="title-icon">🔥</span>
+        Top Trouble Words
+      </h3>
+      <div class="trouble-list" id="trouble-list">
+        <div class="empty-state">No misspellings yet!</div>
+      </div>
+    </section>
+
+    <!-- Actions -->
+    <section class="actions-section">
+      <a href="dashboard.html" target="_blank" class="action-btn primary">
+        <span class="btn-icon">📊</span>
+        View Dashboard
+      </a>
+    </section>
+
+    <!-- Footer -->
+    <footer class="popup-footer">
+      <span>Learn by retyping</span>
+      <span class="dot">•</span>
+      <a href="landing.html" target="_blank">About</a>
+    </footer>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>
+
