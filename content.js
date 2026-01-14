@@ -1,6 +1,7 @@
 /**
  * Fountain Spell Checker - Content Script
- * Real spell checking using a dictionary of correct words + fuzzy matching
+ * Real spell checking using a dictionary of correct words + optimized fuzzy matching
+ * v3 - BK-tree for O(log n) lookups + keyboard shortcuts
  */
 
 (function() {
@@ -9,7 +10,7 @@
   // ============================================================
   // DICTIONARY OF CORRECT WORDS (Common English words)
   // ============================================================
-  const DICTIONARY = new Set([
+  const WORD_LIST = [
     // Articles, prepositions, conjunctions
     "a", "an", "the", "and", "or", "but", "if", "then", "else", "when",
     "at", "by", "for", "with", "about", "against", "between", "into",
@@ -537,53 +538,210 @@
     "writing", "wrong", "yard", "yeah", "year", "yellow", "yes", "yesterday",
     "yet", "yield", "young", "youngster", "your", "yours", "yourself",
     "youth", "zone"
-  ]);
+  ];
+
+  // ============================================================
+  // BK-TREE IMPLEMENTATION FOR FAST FUZZY MATCHING
+  // ============================================================
+
+  /**
+   * Calculate Levenshtein distance between two strings
+   * Optimized with early termination when exceeding maxDistance
+   */
+  function levenshtein(a, b, maxDistance = Infinity) {
+    if (a === b) return 0;
+    if (a.length === 0) return b.length;
+    if (b.length === 0) return a.length;
+    
+    // Quick length-based rejection
+    if (Math.abs(a.length - b.length) > maxDistance) return maxDistance + 1;
+    
+    // Ensure a is the shorter string for memory efficiency
+    if (a.length > b.length) {
+      [a, b] = [b, a];
+    }
+    
+    const aLen = a.length;
+    const bLen = b.length;
+    
+    // Use single array instead of matrix for memory efficiency
+    let prevRow = new Array(aLen + 1);
+    let currRow = new Array(aLen + 1);
+    
+    // Initialize first row
+    for (let i = 0; i <= aLen; i++) {
+      prevRow[i] = i;
+    }
+    
+    for (let j = 1; j <= bLen; j++) {
+      currRow[0] = j;
+      let minInRow = j;
+      
+      for (let i = 1; i <= aLen; i++) {
+        const cost = a[i - 1] === b[j - 1] ? 0 : 1;
+        currRow[i] = Math.min(
+          prevRow[i] + 1,      // deletion
+          currRow[i - 1] + 1,  // insertion
+          prevRow[i - 1] + cost // substitution
+        );
+        minInRow = Math.min(minInRow, currRow[i]);
+      }
+      
+      // Early termination if all values in row exceed maxDistance
+      if (minInRow > maxDistance) {
+        return maxDistance + 1;
+      }
+      
+      // Swap rows
+      [prevRow, currRow] = [currRow, prevRow];
+    }
+    
+    return prevRow[aLen];
+  }
+
+  /**
+   * BK-Tree Node
+   */
+  class BKNode {
+    constructor(word) {
+      this.word = word;
+      this.children = new Map(); // distance -> child node
+    }
+  }
+
+  /**
+   * BK-Tree for efficient fuzzy string matching
+   * Provides O(log n) average case lookups instead of O(n)
+   */
+  class BKTree {
+    constructor() {
+      this.root = null;
+      this.size = 0;
+    }
+
+    /**
+     * Add a word to the tree
+     */
+    add(word) {
+      if (!this.root) {
+        this.root = new BKNode(word);
+        this.size = 1;
+        return;
+      }
+
+      let current = this.root;
+      while (true) {
+        const dist = levenshtein(word, current.word);
+        
+        if (dist === 0) return; // Word already exists
+        
+        if (!current.children.has(dist)) {
+          current.children.set(dist, new BKNode(word));
+          this.size++;
+          return;
+        }
+        
+        current = current.children.get(dist);
+      }
+    }
+
+    /**
+     * Find all words within maxDistance of the query word
+     */
+    search(query, maxDistance) {
+      const results = [];
+      
+      if (!this.root) return results;
+      
+      const stack = [this.root];
+      
+      while (stack.length > 0) {
+        const node = stack.pop();
+        const dist = levenshtein(query, node.word, maxDistance + 1);
+        
+        if (dist <= maxDistance) {
+          results.push({ word: node.word, distance: dist });
+        }
+        
+        // Only explore children within the valid range
+        const minDist = Math.max(0, dist - maxDistance);
+        const maxDist = dist + maxDistance;
+        
+        for (const [childDist, childNode] of node.children) {
+          if (childDist >= minDist && childDist <= maxDist) {
+            stack.push(childNode);
+          }
+        }
+      }
+      
+      return results;
+    }
+
+    /**
+     * Check if a word exists exactly in the tree
+     */
+    contains(word) {
+      if (!this.root) return false;
+      
+      let current = this.root;
+      while (current) {
+        const dist = levenshtein(word, current.word);
+        if (dist === 0) return true;
+        current = current.children.get(dist);
+      }
+      
+      return false;
+    }
+  }
+
+  // ============================================================
+  // DICTIONARY INITIALIZATION
+  // ============================================================
+  
+  // Create Set for O(1) exact match lookups
+  const DICTIONARY = new Set(WORD_LIST);
+  
+  // Build BK-tree for efficient fuzzy matching
+  const bkTree = new BKTree();
+  for (const word of WORD_LIST) {
+    bkTree.add(word);
+  }
+
+  // Cache for recent lookups (LRU-style)
+  const lookupCache = new Map();
+  const CACHE_SIZE = 100;
+
+  function getCachedCorrection(word) {
+    if (lookupCache.has(word)) {
+      const result = lookupCache.get(word);
+      // Move to end (most recently used)
+      lookupCache.delete(word);
+      lookupCache.set(word, result);
+      return result;
+    }
+    return undefined;
+  }
+
+  function setCachedCorrection(word, correction) {
+    if (lookupCache.size >= CACHE_SIZE) {
+      // Remove oldest entry
+      const firstKey = lookupCache.keys().next().value;
+      lookupCache.delete(firstKey);
+    }
+    lookupCache.set(word, correction);
+  }
 
   // ============================================================
   // SPELL CHECKING FUNCTIONS
   // ============================================================
 
   /**
-   * Calculate Levenshtein distance between two strings
-   */
-  function levenshtein(a, b) {
-    if (a.length === 0) return b.length;
-    if (b.length === 0) return a.length;
-
-    const matrix = [];
-
-    for (let i = 0; i <= b.length; i++) {
-      matrix[i] = [i];
-    }
-
-    for (let j = 0; j <= a.length; j++) {
-      matrix[0][j] = j;
-    }
-
-    for (let i = 1; i <= b.length; i++) {
-      for (let j = 1; j <= a.length; j++) {
-        if (b.charAt(i - 1) === a.charAt(j - 1)) {
-          matrix[i][j] = matrix[i - 1][j - 1];
-        } else {
-          matrix[i][j] = Math.min(
-            matrix[i - 1][j - 1] + 1, // substitution
-            matrix[i][j - 1] + 1,     // insertion
-            matrix[i - 1][j] + 1      // deletion
-          );
-        }
-      }
-    }
-
-    return matrix[b.length][a.length];
-  }
-
-  /**
-   * Find the best matching word from dictionary
+   * Find the best matching word from dictionary using BK-tree
    */
   function findCorrection(word) {
     const lowerWord = word.toLowerCase();
     
-    // If word is in dictionary, it's correct
+    // Check exact match first (O(1))
     if (DICTIONARY.has(lowerWord)) {
       return null;
     }
@@ -598,35 +756,41 @@
       return null;
     }
     
-    let bestMatch = null;
-    let bestDistance = Infinity;
+    // Check cache
+    const cached = getCachedCorrection(lowerWord);
+    if (cached !== undefined) {
+      return cached;
+    }
     
     // Calculate max allowed distance based on word length
     const maxDistance = lowerWord.length <= 4 ? 1 : 
                         lowerWord.length <= 6 ? 2 : 
                         lowerWord.length <= 9 ? 3 : 4;
     
-    // Find closest match
-    for (const dictWord of DICTIONARY) {
-      // Quick length check to skip obviously different words
-      if (Math.abs(dictWord.length - lowerWord.length) > maxDistance) {
-        continue;
-      }
-      
-      // Check if first letter matches (most typos keep first letter)
-      // This greatly speeds up the search
-      if (dictWord[0] !== lowerWord[0] && dictWord[0] !== lowerWord[1]) {
-        continue;
-      }
-      
-      const distance = levenshtein(lowerWord, dictWord);
-      
-      if (distance > 0 && distance <= maxDistance && distance < bestDistance) {
-        bestDistance = distance;
-        bestMatch = dictWord;
-      }
+    // Search BK-tree for candidates
+    const candidates = bkTree.search(lowerWord, maxDistance);
+    
+    if (candidates.length === 0) {
+      setCachedCorrection(lowerWord, null);
+      return null;
     }
     
+    // Find best match (closest distance, then alphabetically for ties)
+    candidates.sort((a, b) => {
+      if (a.distance !== b.distance) return a.distance - b.distance;
+      return a.word.localeCompare(b.word);
+    });
+    
+    // Filter out exact matches (distance 0)
+    const corrections = candidates.filter(c => c.distance > 0);
+    
+    if (corrections.length === 0) {
+      setCachedCorrection(lowerWord, null);
+      return null;
+    }
+    
+    const bestMatch = corrections[0].word;
+    setCachedCorrection(lowerWord, bestMatch);
     return bestMatch;
   }
 
@@ -761,7 +925,7 @@
         <span class="fountain-spell-arrow">→</span>
         <span class="fountain-spell-correct">${correct}</span>
       </div>
-      <div class="fountain-spell-hint">Delete and retype correctly</div>
+      <div class="fountain-spell-hint">Delete and retype correctly • Press <kbd>Esc</kbd> to dismiss</div>
     `;
     
     document.body.appendChild(popup);
@@ -800,14 +964,16 @@
       activePopup.classList.remove('fountain-spell-visible');
       activePopup.classList.add('fountain-spell-hiding');
       
+      const popupToRemove = activePopup;
       setTimeout(() => {
-        if (activePopup && activePopup.parentNode) {
-          activePopup.parentNode.removeChild(activePopup);
+        if (popupToRemove && popupToRemove.parentNode) {
+          popupToRemove.parentNode.removeChild(popupToRemove);
         }
-        activePopup = null;
-        currentMisspelling = null;
-        currentElement = null;
       }, 200);
+      
+      activePopup = null;
+      currentMisspelling = null;
+      currentElement = null;
     }
   }
 
@@ -828,6 +994,16 @@
         hidePopup();
         return;
       }
+    }
+  }
+
+  function handleKeyDown(event) {
+    // Escape key dismisses the popup
+    if (event.key === 'Escape' && activePopup) {
+      event.preventDefault();
+      event.stopPropagation();
+      hidePopup();
+      return;
     }
   }
 
@@ -903,6 +1079,8 @@
   // ============================================================
 
   function init() {
+    // Use capture phase for keydown to intercept Escape before other handlers
+    document.addEventListener('keydown', handleKeyDown, true);
     document.addEventListener('input', handleInput, true);
     document.addEventListener('keyup', handleKeyUp, true);
     document.addEventListener('blur', handleBlur, true);
@@ -921,7 +1099,8 @@
       subtree: true
     });
     
-    console.log('✨ Fountain Spell Checker initialized (v2 - Smart Dictionary)');
+    console.log(`✨ Fountain Spell Checker initialized (v3 - BK-tree optimized)`);
+    console.log(`   Dictionary: ${DICTIONARY.size} words | BK-tree nodes: ${bkTree.size}`);
   }
 
   if (document.readyState === 'loading') {
