@@ -11,6 +11,57 @@
   // Format: "misspelling": "correct"
   // ============================================================
   const MISSPELLINGS = {
+    // Common short typos
+    "teh": "the",
+    "hte": "the",
+    "taht": "that",
+    "waht": "what",
+    "whta": "what",
+    "yuo": "you",
+    "cna": "can",
+    "adn": "and",
+    "thn": "then",
+    "fo": "of",
+    "ot": "to",
+    "ti": "it",
+    "si": "is",
+    "nto": "not",
+    "hwo": "how",
+    "hsa": "has",
+    "hav": "have",
+    "jsut": "just",
+    "liek": "like",
+    "knwo": "know",
+    "wnat": "want",
+    "form": "from",
+    "woudl": "would",
+    "coudl": "could",
+    "shoudl": "should",
+    "thsi": "this",
+    "whit": "with",
+    "ther": "there",
+    "tehy": "they",
+    "hvae": "have",
+    "ahve": "have",
+    "nwo": "now",
+    "eveyr": "every",
+    "soem": "some",
+    "yoru": "your",
+    "aobut": "about",
+    "beeing": "being",
+    "goign": "going",
+    "sayign": "saying",
+    "doign": "doing",
+    "makign": "making",
+    "takign": "taking",
+    "comign": "coming",
+    "geting": "getting",
+    "poeple": "people",
+    "thign": "thing",
+    "thnig": "thing",
+    "rigth": "right",
+    "rigt": "right",
+    
     // A
     "acheive": "achieve",
     "achievment": "achievement",
@@ -671,25 +722,36 @@
     const triggerKeys = [' ', '.', ',', '!', '?', ';', ':', 'Enter', 'Tab'];
     
     if (triggerKeys.includes(event.key)) {
-      // Get the word that was just completed
+      // Get the text content
       let text = '';
+      let cursorPos = 0;
       
       if (element.tagName === 'INPUT' || element.tagName === 'TEXTAREA') {
         text = element.value;
+        cursorPos = element.selectionStart || text.length;
       } else if (element.isContentEditable) {
-        text = element.textContent || element.innerText;
+        text = element.textContent || element.innerText || '';
+        cursorPos = text.length;
       }
       
-      // Extract the last completed word (before the trigger character)
-      const words = text.trim().split(/\s+/);
+      // Get text before cursor (where the space was just typed)
+      const textBeforeCursor = text.substring(0, cursorPos);
+      
+      // Find the last completed word (the word before the space/punctuation)
+      // Remove the trailing trigger character and get the last word
+      const textWithoutTrigger = textBeforeCursor.replace(/[\s.,!?;:]+$/, '');
+      const words = textWithoutTrigger.split(/\s+/);
       const lastCompletedWord = words[words.length - 1] || '';
       const cleanWord = lastCompletedWord.replace(/[^a-zA-Z']/g, '');
       
-      if (cleanWord && cleanWord.length > 1) {
+      console.log('Fountain: Checking word:', cleanWord); // Debug log
+      
+      if (cleanWord && cleanWord.length >= 2) {
         const correct = checkSpelling(cleanWord);
         
         if (correct) {
           // Found a misspelling!
+          console.log('Fountain: Misspelling found!', cleanWord, '->', correct); // Debug log
           showPopup(element, cleanWord, correct);
           logMisspelling(cleanWord, correct);
         }
